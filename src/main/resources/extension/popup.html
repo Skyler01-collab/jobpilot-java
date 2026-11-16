@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  body { width: 300px; margin: 0; padding: 14px; font: 14px/1.4 "Segoe UI", system-ui, sans-serif; color: #17212b; }
+  h1 { font-size: 15px; margin: 0 0 8px; color: #0b6e5c; }
+  label { display: block; font-size: 12px; color: #5d6b79; margin-top: 8px; }
+  input[type=text], input[type=password] { width: 100%; box-sizing: border-box; margin-top: 3px; padding: 7px 8px; font: inherit; border: 1px solid #d8dee4; border-radius: 6px; }
+  label.chk { display: flex; gap: 6px; align-items: center; color: #17212b; font-size: 13px; margin-top: 6px; }
+  button { width: 100%; padding: 8px; margin-top: 8px; font: inherit; border-radius: 6px; border: 1px solid #d8dee4; background: #fff; cursor: pointer; }
+  button.primary { background: #0b6e5c; border-color: #0b6e5c; color: #fff; font-weight: 600; }
+  #msg { min-height: 20px; margin-top: 8px; font-size: 13px; color: #5d6b79; }
+  #msg.err { color: #b42318; }
+  #status { font-size: 12px; color: #5d6b79; margin-bottom: 4px; }
+  hr { border: 0; border-top: 1px solid #d8dee4; margin: 12px 0 4px; }
+</style>
+</head>
+<body>
+  <h1>JobPilot</h1>
+  <div id="status">Not connected</div>
+
+  <div id="connectBox">
+    <label>Server<input id="server" type="text"></label>
+    <label>Token (JobPilot &gt; Settings)<input id="token" type="password"></label>
+    <button id="connect" class="primary">Connect</button>
+  </div>
+
+  <div id="main" hidden>
+    <button id="save">Save this page as a job</button>
+    <button id="fill">Fill this form from my profile</button>
+    <hr>
+    <button id="start" class="primary">Start apply queue</button>
+    <button id="stop">Stop queue</button>
+    <label class="chk"><input id="autoClick" type="checkbox"> Click the Apply button for me (never Submit)</label>
+    <label class="chk"><input id="attachResume" type="checkbox"> Attach the tailored PDF</label>
+    <label class="chk"><input id="ai" type="checkbox"> Use AI drafts when set up</label>
+    <button id="change">Change server or token</button>
+  </div>
+
+  <div id="msg"></div>
+  <script src="popup.js"></script>
+</body>
+</html>

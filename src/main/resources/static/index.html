@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JobPilot</title>
+<link rel="stylesheet" href="style.css?v=3">
+</head>
+<body>
+<header class="top">
+  <div class="brand">JobPilot</div>
+  <nav>
+    <button class="tab active" data-tab="jobs">Jobs</button>
+    <button class="tab" data-tab="profile">Profile</button>
+    <button class="tab" data-tab="settings">Settings</button>
+  </nav>
+</header>
+
+<main>
+<!-- ================= JOBS ================= -->
+<section id="tab-jobs">
+  <div class="bar">
+    <input id="fetchQuery" placeholder="Job title, e.g. Java developer (blank uses your target titles)">
+    <input id="fetchLoc" placeholder="Location (used by Adzuna)">
+    <button id="btnFetch" class="primary">Find jobs</button>
+    <button id="btnRescore">Rescore all</button>
+  </div>
+
+  <details class="card">
+    <summary>Add a job yourself</summary>
+    <div class="grid2">
+      <label>Title<input id="mTitle"></label>
+      <label>Company<input id="mCompany"></label>
+      <label>Location<input id="mLocation"></label>
+      <label>Link<input id="mUrl" placeholder="https://..."></label>
+    </div>
+    <label>Description (paste the posting)<textarea id="mDesc" rows="6"></textarea></label>
+    <button id="btnAddJob" class="primary">Add job</button>
+  </details>
+
+  <div class="bar filters">
+    <input id="filterText" placeholder="Filter by title or company">
+    <label class="inline">Minimum score <input id="filterScore" type="number" min="0" max="100" value="0" style="width:70px"></label>
+    <label class="inline"><input id="hideDone" type="checkbox" checked> Hide skipped and applied</label>
+    <span id="count" class="muted"></span>
+  </div>
+
+  <div class="tablewrap">
+    <table id="jobsTable">
+      <thead><tr><th>Match</th><th>Role</th><th>Where</th><th>Status</th><th></th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <p id="emptyJobs" class="empty" hidden>No jobs yet. Fill in your profile, then choose Find jobs.</p>
+  </div>
+</section>
+
+<!-- ================= PROFILE ================= -->
+<section id="tab-profile" hidden>
+  <div class="card">
+    <h2>Start from your resume</h2>
+    <p class="muted">Upload a PDF, DOCX or TXT file. Nothing leaves your computer. Check every section afterwards, because automatic reading is not perfect.</p>
+    <div class="bar">
+      <input id="resumeFile" type="file" accept=".pdf,.docx,.txt">
+      <select id="importMode">
+        <option value="merge">Fill blanks only</option>
+        <option value="replace">Replace everything</option>
+      </select>
+      <button id="btnImport" class="primary">Read resume</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>About you</h2>
+    <div class="grid2">
+      <label>Full name<input id="fullName"></label>
+      <label>Headline<input id="headline" placeholder="Java backend developer"></label>
+      <label>Email<input id="email"></label>
+      <label>Phone<input id="phone"></label>
+      <label>Location<input id="location"></label>
+      <label>Years of experience<input id="years" type="number" step="0.1" min="0"></label>
+      <label>GitHub<input id="github"></label>
+      <label>LinkedIn<input id="linkedin"></label>
+    </div>
+    <label>Summary<textarea id="summary" rows="3"></textarea></label>
+  </div>
+
+  <div class="card">
+    <h2>What you are looking for</h2>
+    <div class="grid2">
+      <label>Target titles (comma separated)<input id="targetTitles"></label>
+      <label>Preferred locations (comma separated)<input id="prefLocs"></label>
+      <label>Skip jobs containing (comma separated)<input id="excluded" placeholder="intern, unpaid"></label>
+      <label class="inline"><input id="remoteOk" type="checkbox"> Remote jobs are fine</label>
+    </div>
+    <label>Skills (comma separated)<textarea id="skills" rows="2"></textarea></label>
+  </div>
+
+  <div class="card">
+    <h2>Experience</h2>
+    <div id="exp"></div>
+    <button id="addExp">Add a role</button>
+  </div>
+
+  <div class="card">
+    <h2>Projects</h2>
+    <div id="proj"></div>
+    <button id="addProj">Add a project</button>
+  </div>
+
+  <div class="card">
+    <h2>Education</h2>
+    <div id="edu"></div>
+    <button id="addEdu">Add education</button>
+  </div>
+
+  <div class="card">
+    <h2>Certifications</h2>
+    <label>One per line<textarea id="certs" rows="3"></textarea></label>
+  </div>
+
+  <div class="savebar"><button id="btnSave" class="primary">Save profile</button></div>
+</section>
+
+<!-- ================= SETTINGS ================= -->
+<section id="tab-settings" hidden>
+  <div class="card">
+    <h2>Connect your browser</h2>
+    <p class="muted">Four steps, about two minutes, done once. After this, job scores appear on Naukri and Indeed.</p>
+    <ol class="steps">
+      <li class="step">
+        <div class="num">1</div>
+        <div>
+          <h3>Download the extension</h3>
+          <p>A small add-on for Chrome, Brave or Edge.</p>
+          <a class="btnlink primary" href="/extension.zip" download>Download extension</a>
+          <p class="muted">Unzip it somewhere permanent, such as Documents. The browser keeps reading it from that folder, so do not delete it afterwards.</p>
+        </div>
+      </li>
+      <li class="step">
+        <div class="num">2</div>
+        <div>
+          <h3>Add it to <span id="browserName">your browser</span></h3>
+          <p>Open a new tab and go to <code id="extUrl">chrome://extensions</code>
+            <button id="copyExtUrl" class="small">Copy address</button>
+            (browsers do not allow a clickable link to this page).</p>
+          <ol class="plain">
+            <li>Turn on <b>Developer mode</b> (top right).</li>
+            <li>Click <b>Load unpacked</b> and choose the unzipped <code>jobpilot-extension</code> folder.</li>
+            <li>Optional: pin the JobPilot icon from the puzzle-piece menu.</li>
+          </ol>
+          <p>Then come back and <b>reload this page</b>.</p>
+        </div>
+      </li>
+      <li class="step">
+        <div class="num">3</div>
+        <div>
+          <h3>Connect</h3>
+          <p><span id="extState" class="pill lo">Looking for the extension…</span></p>
+          <button id="btnPair" class="primary" disabled>Connect extension</button>
+          <p id="lastSeen" class="muted"></p>
+        </div>
+      </li>
+      <li class="step">
+        <div class="num">4</div>
+        <div>
+          <h3>Use it on job sites</h3>
+          <div class="bar">
+            <a class="btnlink" id="openNaukri" href="https://www.naukri.com/" target="_blank" rel="noopener">Open Naukri</a>
+            <a class="btnlink" id="openIndeed" href="https://in.indeed.com/" target="_blank" rel="noopener">Open Indeed</a>
+          </div>
+          <p>Sign in as usual. On a search page every job gets a <b>JobPilot score</b> badge. Open a job and a JobPilot panel appears at the bottom right with the score, the skills you have and lack, and <b>Tailor resume &amp; queue</b>.</p>
+          <p class="muted">Also fills forms on Greenhouse, Lever, Ashby, Workday, Workable, SmartRecruiters, iCIMS and Indeed smart apply. Already had a Naukri tab open? Reload it once.</p>
+          <p class="muted">No score showing? The panel on the job site tells you why (for example "Not connected" or "JobPilot is not running").</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+
+  <details class="card">
+    <summary>Connect manually (advanced)</summary>
+    <p class="muted">If one-click connect does not work, open the extension popup and enter these two values.</p>
+    <label>Server<input id="setServer" readonly></label>
+    <label>Token<input id="setToken" readonly></label>
+    <div class="bar" style="margin-top:10px">
+      <button id="copyToken">Copy token</button>
+      <button id="regenToken">Generate a new token</button>
+    </div>
+  </details>
+
+  <div class="card">
+    <h2>AI drafts</h2>
+    <p id="aiStatus" class="muted"></p>
+  </div>
+
+  <div class="card">
+    <h2>Saved answers</h2>
+    <p class="muted">Remembered when you press Applied in the extension, then filled in automatically next time. Delete anything you do not want reused.</p>
+    <div class="tablewrap">
+      <table id="ansTable" style="min-width:0">
+        <thead><tr><th>Question</th><th>Answer</th><th></th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <p id="emptyAns" class="empty" hidden>No saved answers yet.</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<dialog id="dlg">
+  <div class="dlghead"><h2 id="dlgTitle">Tailored resume</h2><button id="dlgClose">Close</button></div>
+  <p id="dlgSkills"></p>
+  <div class="bar" id="dlgLinks"></div>
+  <label>Cover letter (edit before you use it)
+    <textarea id="dlgCover" rows="12"></textarea>
+  </label>
+  <div class="bar"><button id="dlgCopy">Copy cover letter</button></div>
+</dialog>
+
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="app.js?v=3"></script>
+</body>
+</html>
